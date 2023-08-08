@@ -3,3 +3,4 @@ todo:
 - cache aplikacji w Cache Storage
 - stan koszyka zapisywany w indexedb
 - autoryzacja google + WebAuthn
+- cchat bot do zapytan

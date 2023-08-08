@@ -35,8 +35,8 @@ const Header = () => {
               paddingTop: "10px",
               cursor: "pointer",
             }}
-            src='AMZN-02.png'
-            alt='amazon logo'
+            src='shop-logo-light.png'
+            alt='shop-square logo'
           />
           <div style={{ display: "flex" }}>
             <div>

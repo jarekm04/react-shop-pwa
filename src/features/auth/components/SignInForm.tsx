@@ -94,7 +94,7 @@ const SignInForm = () => {
 
         <div style={{ marginTop: "30px" }}>
           <small>
-            <span>By continuing, you agree to Amazon's</span>
+            <span>By continuing, you agree to Shop Square's</span>
           </small>
         </div>
         <div>
@@ -113,7 +113,7 @@ const SignInForm = () => {
 
       <div style={{ marginTop: "16px" }}>
         <Divider>
-          <small style={{ color: "#767676" }}>New to Amazon?</small>
+          <small style={{ color: "#767676" }}>New to Shop Square?</small>
         </Divider>
         <Link id='register-link' to='/register' style={{ textDecoration: "none", color: "#0000ee" }}>
           <Button

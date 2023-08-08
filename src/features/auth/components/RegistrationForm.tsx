@@ -151,7 +151,7 @@ const RegistrationForm = () => {
 
       <div style={{ marginTop: "30px" }}>
         <small>
-          <span>By creating an account, you agree to Amazon's</span>
+          <span>By creating an account, you agree to Shop Square's</span>
         </small>
       </div>
       <div>
