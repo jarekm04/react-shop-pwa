@@ -11,7 +11,7 @@ const Home = () => {
   const dispatch = useAppDispatch();
   const { position, error } = useGeolocation();
 
-  console.log(products);
+  console.log(position);
   console.log(error);
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 todo:
-- full offline pwa
-- cache aplikacji w Cache Storage
+- full offline pwa - DONE
+- cache aplikacji w Cache Storage - DONE
 - stan koszyka zapisywany w indexedb
 - autoryzacja google + WebAuthn
 - cchat bot do zapytan
@@ -8,5 +8,6 @@ todo:
 - dodaj rozpoznanie mowy - sterowanie głosem, dodawanie produktów
 - dodaj słuchanie podsumowania koszyka
 - customowa operacja sharowania
+- dodaj geolokalizację - pokaz najblisze sklepy
 
 - admin panel - tworzenie, edycja, usuwanie produktów
