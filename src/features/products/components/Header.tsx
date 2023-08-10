@@ -30,12 +30,12 @@ const Header = () => {
           <img
             onClick={() => navigate("/")}
             style={{
-              width: "150px",
+              width: "50px",
               height: "50px",
               paddingTop: "10px",
               cursor: "pointer",
             }}
-            src='shop-logo-light.png'
+            src='shop-icon-cut-bg.png'
             alt='shop-square logo'
           />
           <div style={{ display: "flex" }}>
