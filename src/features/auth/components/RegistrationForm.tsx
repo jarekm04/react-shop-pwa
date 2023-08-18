@@ -13,7 +13,7 @@ const RegistrationForm = () => {
   const emailInput = useInput(validateEmail);
   const passwordInput = useInput(validatePassword);
   const confirmPasswordInput = useInput(validatePassword);
-  const { isLoading, isSuccess } = useAuth();
+  const { isLoading, isSuccess, isError } = useAuth();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -23,11 +23,6 @@ const RegistrationForm = () => {
     passwordInput.clearHandler();
     confirmPasswordInput.clearHandler();
   };
-
-  useEffect(() => {
-    if (isSuccess) navigate("/signin");
-  }, [isSuccess, navigate]);
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 

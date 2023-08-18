@@ -1,57 +1,51 @@
 import Dexie from "dexie";
-import { useEffect } from "react";
 
-class IDBManager extends Dexie {
+class IDBManager {
+  private db: Dexie;
+
   constructor(databaseName: string, version: number, stores: Record<string, string>) {
-    super(databaseName);
-    this.version(version).stores(stores);
+    this.db = new Dexie(databaseName);
+    this.db.version(version).stores(stores);
   }
-}
 
-export function initializeIDB(databaseName: string, version: number, stores: Record<string, string>) {
-  return new IDBManager(databaseName, version, stores);
-}
-
-export const useIDB = (dbManager: Dexie) => {
-  async function init() {
+  async openDatabase(): Promise<void> {
     try {
-      await dbManager.open();
-      console.log("Database opened successfully");
+      await this.db.open();
     } catch (error) {
-      console.error("Error opening database:", error);
+      console.log(`Opening IDB error: ${error}`);
     }
   }
-  useEffect(() => {
-    init();
-  }, []);
 
-  return {
-    addRecord: async <T>(tableName: string, record: T): Promise<void> => {
-      try {
-        const table = dbManager.table(tableName);
-        await table.add(record);
-      } catch (error) {
-        console.error("Error adding record:", error);
-      }
-    },
-    updateRecord: async <T>(tableName: string, id: number, updates: Partial<T>): Promise<void> => {
-      try {
-        const table = dbManager.table(tableName);
-        await table.update(id, updates);
-      } catch (error) {
-        console.error("Error updating record:", error);
-      }
-    },
-    deleteRecord: async (tableName: string, id: number): Promise<void> => {
-      try {
-        const table = dbManager.table(tableName);
-        await table.delete(id);
-      } catch (error) {
-        console.error("Error deleting record:", error);
-      }
-    },
-    getTable: <T>(tableName: string): Dexie.Table<T, number> => {
-      return dbManager.table(tableName);
-    },
-  };
-};
+  getTable<T>(tableName: string): Dexie.Table<T, number> {
+    return this.db.table(tableName);
+  }
+
+  async addRecord<T>(tableName: string, record: T): Promise<number | void> {
+    try {
+      const table = this.getTable<T>(tableName);
+      return table.add(record);
+    } catch (error) {
+      console.log(`Adding to IDB error: ${error}`);
+    }
+  }
+
+  async updateRecord<T>(tableName: string, id: number, updates: Partial<T>): Promise<void> {
+    try {
+      const table = this.getTable<T>(tableName);
+      await table.update(id, updates);
+    } catch (error) {
+      console.log(`Updating in IDB error: ${error}`);
+    }
+  }
+
+  async deleteRecord<T>(tableName: string, id: number): Promise<void> {
+    try {
+      const table = this.getTable<T>(tableName);
+      await table.delete(id);
+    } catch (error) {
+      console.log(`Deleting from IDB error: ${error}`);
+    }
+  }
+}
+
+export default IDBManager;

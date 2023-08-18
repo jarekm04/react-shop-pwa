@@ -11,8 +11,8 @@ const Home = () => {
   const dispatch = useAppDispatch();
   const { position, error } = useGeolocation();
 
-  console.log(position);
-  console.log(error);
+  // console.log(position);
+  // console.log(error);
 
   useEffect(() => {
     dispatch(getProducts());
