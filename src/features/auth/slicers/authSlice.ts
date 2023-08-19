@@ -20,6 +20,8 @@ const initialState: AuthStateTypes = {
   isLoading: false,
   isSuccess: false,
   isError: false,
+  userEmail: "",
+  userHasWebAuthn: false,
 };
 
 export const register = createAsyncThunk("auth/register", async (newUser: NewUserTypes, thunkApi) => {
@@ -46,7 +48,34 @@ export const verifyJwt = createAsyncThunk("auth/verify-jwt", async (jwt: string,
   try {
     return await authService.verifyJwt(jwt);
   } catch (error) {
-    return thunkAPI.rejectWithValue("Unable to verify");
+    return thunkAPI.rejectWithValue("Unable to verify!");
+  }
+});
+
+export const addWebAuthnOptions = createAsyncThunk(
+  "webauthn/addWebAuthnOptions",
+  async (user: DisplayUserTypes, thunkAPI) => {
+    try {
+      return await authService.addWebAuthnOptions(user);
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Unable to add WebAuthn Options!");
+    }
+  }
+);
+
+export const checkAuthOptions = createAsyncThunk("webauthn/checkAuthOptions", async (email: string, thunkAPI) => {
+  try {
+    return await authService.checkAuthOptions(email);
+  } catch (error) {
+    return thunkAPI.rejectWithValue("Unable to check WebAuthn Options");
+  }
+});
+
+export const signInWithWebAuthn = createAsyncThunk("webauthn/loginWebAuthn", async (email: string, thunkAPI) => {
+  try {
+    return await authService.signInWithWebAuthn(email);
+  } catch (error) {
+    thunkAPI.rejectWithValue("Unable to sign in with WebAuthn!");
   }
 });
 
@@ -119,6 +148,38 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
+        state.isAuthenticated = false;
+      })
+      // WEBAUTHN CHECK OPTIONS
+      .addCase(checkAuthOptions.fulfilled, (state, action) => {
+        const { email, webauthn } = action.payload;
+        state.userEmail = email;
+        state.userHasWebAuthn = webauthn;
+      })
+      .addCase(checkAuthOptions.rejected, (state) => {
+        state.userEmail = "";
+        state.userHasWebAuthn = false;
+      })
+      // WEBAUTHN LOGIN
+      .addCase(signInWithWebAuthn.pending, (state) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.user = null;
+      })
+      .addCase(signInWithWebAuthn.fulfilled, (state, action) => {
+        const { user } = action.payload;
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.user = user;
+        state.isAuthenticated = true;
+      })
+      .addCase(signInWithWebAuthn.rejected, (state) => {
+        state.isSuccess = false;
+        state.isLoading = false;
+        state.isError = true;
+        state.user = null;
         state.isAuthenticated = false;
       });
   },

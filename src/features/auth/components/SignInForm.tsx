@@ -5,16 +5,15 @@ import { useAppDispatch } from "@app/store";
 import { useInput } from "@hooks/useInput";
 import { useAuth } from "@hooks/useAuth";
 import { validateEmail, validatePassword } from "@utils/validators";
-import { login } from "../slicers/authSlice";
+import { checkAuthOptions, login, signInWithWebAuthn } from "../slicers/authSlice";
 import { SignInFooter } from "./Footer";
-import * as SimpleWebAuthnBrowser from "@simplewebauthn/browser";
 
 const SignInForm = () => {
   const [isUserExists, setIsUserExists] = useState(false);
   const [isWebAuthn, setIsWebAuthn] = useState(false);
   const emailInput = useInput(validateEmail);
   const passwordInput = useInput(validatePassword);
-  const { isLoading, isAuthenticated } = useAuth();
+  const { isLoading, isAuthenticated, userEmail, userHasWebAuthn } = useAuth();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -23,66 +22,20 @@ const SignInForm = () => {
     navigate("/");
   }, [isAuthenticated, navigate]);
 
-  const checkAuthOptions = async () => {
-    try {
-      const response = await fetch("http://localhost:3000/api/webauthn/auth-options", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: emailInput.text }),
-      });
-      const data = await response.json();
-      console.log(data);
+  useEffect(() => {
+    if (userEmail) setIsUserExists(true);
+    if (userHasWebAuthn) setIsWebAuthn(true);
+  }, [userEmail, userHasWebAuthn]);
 
-      if (data.email) {
-        setIsUserExists(true);
-      }
-      if (data.webauthn) {
-        setIsWebAuthn(true);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const signInWithWebAuthn = async () => {
-    try {
-      const options = await fetch("http://localhost:3000/api/webauthn/login-options", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: emailInput.text }),
-      });
-      const optionsRes = await options.json();
-      const loginRes = await SimpleWebAuthnBrowser.startAuthentication(optionsRes);
-
-      const verificationRes = await fetch("http://localhost:3000/api/webauthn/login-verification", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: emailInput.text, data: loginRes }),
-      });
-
-      const data = await verificationRes.json();
-
-      if (verificationRes.status === 201 && data.email && data.name) {
-        console.log(data);
-        navigate("/"); // dodać dodawanie uytkownika poprzez takie zalogowanie // x@x.pl xxxxxx
-      }
-
-    } catch (error) {
-      console.log(error);
-    }
+  const handleCheckAuthOptions = async () => {
+    dispatch(checkAuthOptions(emailInput.text));
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!isUserExists) {
-      checkAuthOptions();
+      handleCheckAuthOptions();
     } else {
       const user = {
         email: emailInput.text,
@@ -142,7 +95,11 @@ const SignInForm = () => {
               </>
             )}
 
-            {isWebAuthn && <Button onClick={signInWithWebAuthn}>Sign In with WebAuthn / Passkey</Button>}
+            {isWebAuthn && (
+              <Button onClick={() => dispatch(signInWithWebAuthn(emailInput.text))}>
+                Sign In with WebAuthn / Passkey
+              </Button>
+            )}
 
             <Button
               id='signin-btn'

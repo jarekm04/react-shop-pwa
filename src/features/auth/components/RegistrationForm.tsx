@@ -6,14 +6,13 @@ import { useAuth } from "@hooks/useAuth";
 import { validateEmail, validateName, validatePassword } from "@utils/validators";
 import { register, reset } from "../slicers/authSlice";
 import { NewUserTypes } from "../models/NewUser";
-import { useEffect } from "react";
 
 const RegistrationForm = () => {
   const nameInput = useInput(validateName);
   const emailInput = useInput(validateEmail);
   const passwordInput = useInput(validatePassword);
   const confirmPasswordInput = useInput(validatePassword);
-  const { isLoading, isSuccess, isError } = useAuth();
+  const { isLoading } = useAuth();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -23,6 +22,7 @@ const RegistrationForm = () => {
     passwordInput.clearHandler();
     confirmPasswordInput.clearHandler();
   };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 

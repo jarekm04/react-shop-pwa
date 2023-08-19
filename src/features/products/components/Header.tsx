@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@app/store";
 import { useAuth } from "@hooks/useAuth";
 import { useProduct } from "@hooks/useProduct";
-import { logout } from "@features/auth/slicers/authSlice";
-import * as SimpleWebAuthnBrowser from "@simplewebauthn/browser";
+import { addWebAuthnOptions, logout } from "@features/auth/slicers/authSlice";
+import { DisplayUserTypes } from "@features/auth/models/DisplayUser";
 
 const Header = () => {
   const [cartCount, setCartCount] = useState(0);
@@ -15,55 +15,22 @@ const Header = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  // console.log(user);
+  console.log(user);
 
   useEffect(() => {
     const totalQty = cart.reduce((acc, item) => acc + item.quantity, 0);
     setCartCount(() => totalQty);
   }, [cart]);
 
+  const handleAddWebAuthnOptions = (user?: DisplayUserTypes | null) => {
+    if (user) {
+      dispatch(addWebAuthnOptions(user));
+    } else return;
+  };
+
   const handleLogout = () => {
     dispatch(logout());
     navigate("/signin");
-  };
-
-  const addWebAuthnOptions = async () => {
-    try {
-      const registrationRes = await fetch("http://localhost:3000/api/webauthn/registration-options", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(user),
-      });
-
-      const options = await registrationRes.json();
-      options.authenticatorSelection.residentKey = "required";
-      options.authenticatorSelection.requireResidentKey = true;
-      options.extensions = {
-        credProps: true,
-      };
-
-      const authRes = await SimpleWebAuthnBrowser.startRegistration(options);
-
-      const verificationRes = await fetch("http://localhost:3000/api/webauthn/registration-verification", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ user, data: authRes }),
-      });
-
-      const data = await verificationRes.json();
-
-      if (verificationRes.ok) {
-        alert("You can now login using the new registered method!");
-      } else {
-        alert("Oops something went wrong!");
-      }
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   return (
@@ -82,7 +49,7 @@ const Header = () => {
             alt='shop-square logo'
           />
           <div style={{ display: "flex", gap: "20px" }}>
-            <Button onClick={addWebAuthnOptions}>Add Authenticator / Passkey</Button>
+            <Button onClick={() => handleAddWebAuthnOptions(user)}>Add Authenticator / Passkey</Button>
             <div>
               <div>Hello, {user?.name}</div>
               <Button onClick={handleLogout} sx={{ padding: 0, marginRight: "16px" }} color='inherit'>
