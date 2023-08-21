@@ -15,8 +15,6 @@ const Header = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  console.log(user);
-
   useEffect(() => {
     const totalQty = cart.reduce((acc, item) => acc + item.quantity, 0);
     setCartCount(() => totalQty);

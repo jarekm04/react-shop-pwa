@@ -1,3 +1,4 @@
+import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "@app/store";
 import authService from "../services/auth.service";
@@ -75,7 +76,11 @@ export const signInWithWebAuthn = createAsyncThunk("webauthn/loginWebAuthn", asy
   try {
     return await authService.signInWithWebAuthn(email);
   } catch (error) {
-    thunkAPI.rejectWithValue("Unable to sign in with WebAuthn!");
+    if (error instanceof axios.AxiosError) {
+      return thunkAPI.rejectWithValue(error.response?.data.message);
+    } else {
+      throw new Error("Unable to sign in with WebAuthn!");
+    }
   }
 });
 
@@ -133,6 +138,8 @@ export const authSlice = createSlice({
         state.user = null;
         state.jwt = null;
         state.isAuthenticated = false;
+        state.userEmail = "";
+        state.userHasWebAuthn = false;
       })
       // VERIFY JWT
       .addCase(verifyJwt.pending, (state) => {

@@ -8,7 +8,7 @@ todo:
 - dodaj fullscreen, okienko zewnętrzne a w niej reklama - player - filmik
 - dodaj rozpoznanie mowy - sterowanie głosem, dodawanie produktów
 - dodaj słuchanie podsumowania koszyka
-- customowa operacja sharowania
+- customowa operacja sharowania produktu
 - dodaj geolokalizację - pokaz najblisze sklepy
 
 - admin panel - tworzenie, edycja, usuwanie produktów

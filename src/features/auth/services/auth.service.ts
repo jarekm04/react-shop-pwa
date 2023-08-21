@@ -82,7 +82,8 @@ const signInWithWebAuthn = async (email: string) => {
 
   const data = verificationResponse.data;
 
-  if (data) {
+
+  if (data !== undefined || data !== null) {
     localStorage.setItem("user", JSON.stringify(data.user));
     return data;
   } else {
