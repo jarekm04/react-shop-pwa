@@ -4,7 +4,6 @@ import { CartTypes } from "../models/Cart";
 import { ProductDocumentTypes } from "../models/Product";
 import { ProductStateTypes } from "../models/ProductState";
 import { ModificationTypes } from "../models/ModificationType";
-import IDBManager from "@hooks/useIDB";
 
 const initialState: ProductStateTypes = {
   products: [],
@@ -14,52 +13,67 @@ const initialState: ProductStateTypes = {
   isError: false,
 };
 
-const CART_IDB = new IDBManager("cart", 1, {
-  cart: "++id, _id, name, price, description, quantity", // Dodaj definicję dla koszyka
-});
-CART_IDB.openDatabase();
+const modifyQtyByOne = (
+  cart: CartTypes,
+  selectedProduct: ProductDocumentTypes,
+  modificationType: ModificationTypes,
+) => {
+  const previousCart = [...cart];
 
-export const getProducts = createAsyncThunk("product", async () => {
+  const productInCart = previousCart.find(
+    (product) => product._id === selectedProduct._id
+  );
+
+  let newCart = [];
+
+  if (!productInCart) {
+    previousCart.push({ ...selectedProduct, quantity: 1 });
+    newCart = previousCart;
+  } else {
+    const filteredCart = previousCart.filter(
+      (p) => p._id !== productInCart._id
+    );
+
+    const modification = modificationType === 'INCREMENT' ? 1 : -1;
+
+    productInCart.quantity = productInCart.quantity + modification;
+
+    if (productInCart.quantity === 0) {
+      newCart = [...filteredCart];
+    } else {
+      newCart = [...filteredCart, productInCart];
+    }
+  }
+  return newCart;
+};
+
+export const getProducts = createAsyncThunk('product', async () => {
   try {
     return await productService.getProducts();
   } catch (error) {
-    console.error(error);
+    console.log('Error: ', error);
   }
 });
 
-export const addToCartIDB = async (product: ProductDocumentTypes) => {
-  try {
-    return await CART_IDB.addRecord("cart", { ...product });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 export const productSlice = createSlice({
-  name: "product",
+  name: 'product',
   initialState,
   reducers: {
     incrementProduct: (state, action: PayloadAction<ProductDocumentTypes>) => {
-      const selectedProduct = action.payload;
-      const productInCart = state.cart.find((product) => product._id === selectedProduct._id);
-
-      if (productInCart) {
-        productInCart.quantity += 1;
-      } else {
-        state.cart.push({ ...selectedProduct, quantity: 1 });
-      }
+      const modifiedCart = modifyQtyByOne(
+        state.cart,
+        action.payload,
+        'INCREMENT'
+      );
+      state.cart = modifiedCart;
     },
     decrementProduct: (state, action: PayloadAction<ProductDocumentTypes>) => {
-      const selectedProduct = action.payload;
-      const productInCart = state.cart.find((product) => product._id === selectedProduct._id);
-
-      if (productInCart) {
-        if (productInCart.quantity > 1) {
-          productInCart.quantity -= 1;
-        } else {
-          return state.cart.filter((product) => product._id !== selectedProduct._id);
-        }
-      }
+      const modifiedCart = modifyQtyByOne(
+        state.cart,
+        action.payload,
+        'DECREMENT'
+      );
+      state.cart = modifiedCart;
     },
     resetCart: (state) => {
       state.cart = [];
@@ -85,4 +99,5 @@ export const productSlice = createSlice({
   },
 });
 
-export const { incrementProduct, decrementProduct, resetCart } = productSlice.actions;
+export const { incrementProduct, decrementProduct, resetCart } =
+  productSlice.actions;

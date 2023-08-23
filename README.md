@@ -1,4 +1,5 @@
 todo:
+- React Context
 - full offline pwa - DONE
 - cache aplikacji w Cache Storage - DONE
 - stan koszyka zapisywany w indexedb
