@@ -9,7 +9,7 @@ import { useGeolocation } from "@hooks/useGeolocation";
 const Home = () => {
   const { products } = useProduct();
   const dispatch = useAppDispatch();
-  const { position, error } = useGeolocation();
+  // const { position, error } = useGeolocation();
 
   // console.log(position);
   // console.log(error);

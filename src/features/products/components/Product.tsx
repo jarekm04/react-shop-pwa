@@ -1,7 +1,7 @@
 import { Card, CardActions, CardContent, CardMedia, Button, Typography } from "@mui/material";
 import { useAppDispatch } from "@app/store";
 import { useProduct } from "@hooks/useProduct";
-import { decrementProduct, incrementProduct } from "../slicers/productsSlice";
+import { addToCartIDB, decrementProduct, incrementProduct } from "../slicers/productsSlice";
 import { ProductDocumentTypes } from "../models/Product";
 
 const Product = ({ product }: { product: ProductDocumentTypes }) => {
@@ -25,13 +25,13 @@ const Product = ({ product }: { product: ProductDocumentTypes }) => {
         </Typography>
         {product.description && (
           <Typography variant='body2' color='text.secondary'>
-            $ {product.description}
+            {product.description}
           </Typography>
         )}
       </CardContent>
       <CardActions sx={{ display: "flex", justifyContent: "space-between" }}>
         <Button
-          onClick={() => {
+          onClick={async () => {
             dispatch(decrementProduct(product));
           }}
           disabled={qty === 0}
@@ -41,8 +41,9 @@ const Product = ({ product }: { product: ProductDocumentTypes }) => {
         </Button>
         <span>{qty}</span>
         <Button
-          onClick={() => {
+          onClick={async () => {
             dispatch(incrementProduct(product));
+            await addToCartIDB(product);
           }}
           size='large'
         >

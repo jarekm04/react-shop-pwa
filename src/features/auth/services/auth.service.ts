@@ -75,19 +75,22 @@ const signInWithWebAuthn = async (email: string) => {
   const optionsRes = optionsResponse.data;
   const loginRes = await SimpleWebAuthnBrowser.startAuthentication(optionsRes);
 
-  const verificationResponse = await axios.post(`${import.meta.env.VITE_API_HOST}/webauthn/login-verification`, {
-    email: email,
-    data: loginRes,
-  });
+  try {
+    const verificationResponse = await axios.post(`${import.meta.env.VITE_API_HOST}/webauthn/login-verification`, {
+      email: email,
+      data: loginRes,
+    });
 
-  const data = verificationResponse.data;
+    const data = verificationResponse.data;
 
-
-  if (data !== undefined || data !== null) {
-    localStorage.setItem("user", JSON.stringify(data.user));
-    return data;
-  } else {
-    return null;
+    if (data !== undefined || data !== null) {
+      localStorage.setItem("user", JSON.stringify(data.user));
+      return data;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    alert("Wrong credentials");
   }
 };
 

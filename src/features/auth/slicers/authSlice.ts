@@ -175,6 +175,7 @@ export const authSlice = createSlice({
         state.user = null;
       })
       .addCase(signInWithWebAuthn.fulfilled, (state, action) => {
+        if (!action.payload) return;
         const { user } = action.payload;
         state.isLoading = false;
         state.isError = false;

@@ -21,6 +21,8 @@ class IDBManager {
   }
 
   async addRecord<T>(tableName: string, record: T): Promise<number | void> {
+    console.log(tableName);
+    console.log(record);
     try {
       const table = this.getTable<T>(tableName);
       return table.add(record);
