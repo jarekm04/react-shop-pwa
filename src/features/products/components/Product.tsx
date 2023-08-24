@@ -2,19 +2,19 @@ import { Card, CardActions, CardContent, CardMedia, Button, Typography } from "@
 import { useAppDispatch } from "@app/store";
 import { useProduct } from "@hooks/useProduct";
 import { decrementProduct, incrementProduct } from "../slicers/productsSlice";
-import { ProductDocumentTypes } from "../models/Product";
+import { ProductDocumentTypes } from "../types/Product";
 
 const Product = ({ product }: { product: ProductDocumentTypes }) => {
-  const { cart } = useProduct();
+  // const { cart } = useProduct();
   const dispatch = useAppDispatch();
 
-  let qty = 0;
+  // let qty = 0;
 
-  const cartItem = cart.find((item) => item._id === product._id);
+  // const cartItem = cart.find((item) => item._id === product._id);
 
-  if (cartItem) {
-    qty = cartItem.quantity;
-  }
+  // if (cartItem) {
+  //   qty = cartItem.quantity;
+  // }
 
   return (
     <Card sx={{ width: 300, minWidth: 300 }}>
@@ -34,16 +34,15 @@ const Product = ({ product }: { product: ProductDocumentTypes }) => {
           onClick={async () => {
             dispatch(decrementProduct(product));
           }}
-          disabled={qty === 0}
+          // disabled={qty === 0}
           size='large'
         >
           -
         </Button>
-        <span>{qty}</span>
+        {/* <span>{qty}</span> */}
         <Button
           onClick={async () => {
             dispatch(incrementProduct(product));
-            await addToCartIDB(product);
           }}
           size='large'
         >

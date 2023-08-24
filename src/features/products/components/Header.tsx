@@ -11,14 +11,14 @@ import { DisplayUserTypes } from "@features/auth/models/DisplayUser";
 const Header = () => {
   const [cartCount, setCartCount] = useState(0);
   const { user } = useAuth();
-  const { cart } = useProduct();
+  // const { cart } = useProduct();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const totalQty = cart.reduce((acc, item) => acc + item.quantity, 0);
-    setCartCount(() => totalQty);
-  }, [cart]);
+  // useEffect(() => {
+  //   const totalQty = cart.reduce((acc, item) => acc + item.quantity, 0);
+  //   setCartCount(() => totalQty);
+  // }, [cart]);
 
   const handleAddWebAuthnOptions = (user?: DisplayUserTypes | null) => {
     if (user) {

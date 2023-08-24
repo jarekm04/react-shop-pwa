@@ -7,7 +7,7 @@ import { productSlice } from "@features/products/slicers/productsSlice";
 export const store = configureStore({
   reducer: {
     auth: authSlice.reducer,
-    product: productSlice.reducer,
+    // product: productSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

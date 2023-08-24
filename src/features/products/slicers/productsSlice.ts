@@ -1,9 +1,13 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import productService from "../services/product.service";
-import { CartTypes } from "../models/Cart";
-import { ProductDocumentTypes } from "../models/Product";
-import { ProductStateTypes } from "../models/ProductState";
-import { ModificationTypes } from "../models/ModificationType";
+// import productService from "../services/product.service";
+import { CartTypes } from "../types/Cart";
+import { ProductDocumentTypes } from "../types/Product";
+import { ModificationTypes } from "../types/ModificationType";
+
+export interface ProductStateTypes extends StatusStateTypes {
+  products: ProductDocumentTypes[];
+  cart: CartTypes;
+}
 
 const initialState: ProductStateTypes = {
   products: [],
