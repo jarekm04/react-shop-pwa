@@ -1,7 +1,7 @@
 import { Card, CardActions, CardContent, CardMedia, Button, Typography } from "@mui/material";
 import { useAppDispatch } from "@app/store";
 import { useProduct } from "@hooks/useProduct";
-import { addToCartIDB, decrementProduct, incrementProduct } from "../slicers/productsSlice";
+import { decrementProduct, incrementProduct } from "../slicers/productsSlice";
 import { ProductDocumentTypes } from "../models/Product";
 
 const Product = ({ product }: { product: ProductDocumentTypes }) => {
