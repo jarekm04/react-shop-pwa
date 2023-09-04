@@ -11,5 +11,6 @@ todo:
 - dodaj słuchanie podsumowania koszyka
 - customowa operacja sharowania produktu
 - dodaj geolokalizację - pokaz najblisze sklepy
+- przy 401 auto refresh token przez interceptor w axios
 
 - admin panel - tworzenie, edycja, usuwanie produktów

@@ -4,21 +4,21 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@app/store";
 import { useAuth } from "@hooks/useAuth";
-import { useProduct } from "@hooks/useProduct";
 import { addWebAuthnOptions, logout } from "@features/auth/slicers/authSlice";
 import { DisplayUserTypes } from "@features/auth/models/DisplayUser";
+import { useCart } from "@hooks/useCart";
 
 const Header = () => {
   const [cartCount, setCartCount] = useState(0);
   const { user } = useAuth();
-  // const { cart } = useProduct();
+  const { cart } = useCart();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   const totalQty = cart.reduce((acc, item) => acc + item.quantity, 0);
-  //   setCartCount(() => totalQty);
-  // }, [cart]);
+  useEffect(() => {
+    const totalQty = cart.reduce((acc, item) => acc + item.quantity, 0);
+    setCartCount(() => totalQty);
+  }, [cart]);
 
   const handleAddWebAuthnOptions = (user?: DisplayUserTypes | null) => {
     if (user) {

@@ -70,6 +70,7 @@ export default defineConfig({
       "@pages": path.resolve(__dirname, "./src/pages"),
       "@utils": path.resolve(__dirname, "./src/utils"),
       "@types": path.resolve(__dirname, "./src/types"),
+      "@providers": path.resolve(__dirname, "./src/providers"),
     },
   },
 });

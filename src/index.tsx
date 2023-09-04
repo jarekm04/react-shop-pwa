@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { store } from "@app/store.ts";
-import App from "./App.tsx";
+import AppProvider from "./providers/AppProvider.tsx";
 import "./index.css";
 import { registerSW } from "virtual:pwa-register";
 
@@ -17,7 +17,7 @@ const updateSW = registerSW({
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <AppProvider />
     </Provider>
   </React.StrictMode>
 );

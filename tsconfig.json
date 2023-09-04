@@ -6,7 +6,7 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "types": ["vite/client", "vite-plugin-pwa/client"],
-    
+
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
@@ -27,7 +27,8 @@
       "@hooks/*": ["./src/hooks/*"],
       "@pages/*": ["./src/pages/*"],
       "@utils/*": ["./src/utils/*"],
-      "@types/*": ["./src/types/*"]
+      "@types/*": ["./src/types/*"],
+      "@providers/*": ["./src/providers/*"]
     }
   },
   "include": ["src", "cypress"],

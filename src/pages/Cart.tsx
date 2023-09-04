@@ -1,9 +1,11 @@
-import { useProduct } from "@hooks/useProduct";
+import { useProducts } from "@hooks/useProducts";
 import Header from "@features/products/components/Header";
 import Product from "@features/products/components/Product";
+import { useCart } from "@hooks/useCart";
 
 const Cart = () => {
-  const { cart, products } = useProduct();
+  const { cart } = useCart();
+  const { products } = useProducts();
 
   const totalQty = cart.reduce((acc, item) => acc + item.quantity, 0);
   const totalPrice = cart.reduce((acc, item) => acc + item.quantity * item.price, 0);

@@ -1,20 +1,21 @@
 import { Card, CardActions, CardContent, CardMedia, Button, Typography } from "@mui/material";
-import { useAppDispatch } from "@app/store";
-import { useProduct } from "@hooks/useProduct";
-import { decrementProduct, incrementProduct } from "../slicers/productsSlice";
 import { ProductDocumentTypes } from "../types/Product";
+import { db } from "../../../db";
+import { useLiveQuery } from "dexie-react-hooks";
+import { useCart } from "@hooks/useCart";
 
 const Product = ({ product }: { product: ProductDocumentTypes }) => {
-  // const { cart } = useProduct();
-  const dispatch = useAppDispatch();
+  const { cart, incrementProduct, decrementProduct } = useCart();
 
-  // let qty = 0;
+  let qty = 0;
 
-  // const cartItem = cart.find((item) => item._id === product._id);
+  const cartDB = useLiveQuery(() => db.cart.toArray());
 
-  // if (cartItem) {
-  //   qty = cartItem.quantity;
-  // }
+  const cartItem = cart.find((item) => item._id === product._id);
+
+  if (cartItem) {
+    qty = cartItem.quantity;
+  }
 
   return (
     <Card sx={{ width: 300, minWidth: 300 }}>
@@ -31,18 +32,19 @@ const Product = ({ product }: { product: ProductDocumentTypes }) => {
       </CardContent>
       <CardActions sx={{ display: "flex", justifyContent: "space-between" }}>
         <Button
-          onClick={async () => {
-            dispatch(decrementProduct(product));
+          onClick={() => {
+            decrementProduct(product);
           }}
-          // disabled={qty === 0}
+          disabled={qty === 0}
           size='large'
         >
           -
         </Button>
-        {/* <span>{qty}</span> */}
+        <span>{qty}</span>
         <Button
           onClick={async () => {
-            dispatch(incrementProduct(product));
+            incrementProduct(product);
+            // addProductToIDB(product);
           }}
           size='large'
         >
