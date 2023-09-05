@@ -1,5 +1,5 @@
 todo:
-- React Context
+- React Context & Redux - mieszanie kontekstu w celach treningowych
 - full offline pwa - DONE
 - cache aplikacji w Cache Storage - DONE
 - stan koszyka zapisywany w indexedb

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@app/store";
 import { useAuth } from "@hooks/useAuth";
 import { addWebAuthnOptions, logout } from "@features/auth/slicers/authSlice";
-import { DisplayUserTypes } from "@features/auth/models/DisplayUser";
+import { DisplayUserTypes } from "@features/auth/types/DisplayUser";
 import { useCart } from "@hooks/useCart";
 
 const Header = () => {

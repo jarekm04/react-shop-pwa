@@ -2,11 +2,11 @@ import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "@app/store";
 import authService from "../services/auth.service";
-import { JwtTypes } from "../models/Jwt";
-import { NewUserTypes } from "../models/NewUser";
-import { DisplayUserTypes } from "../models/DisplayUser";
-import { AuthStateTypes } from "../models/AuthState";
-import { LoginUserTypes } from "../models/LoginUser";
+import { JwtTypes } from "../types/Jwt";
+import { NewUserTypes } from "../types/NewUser";
+import { DisplayUserTypes } from "../types/DisplayUser";
+import { AuthStateTypes } from "../types/AuthState";
+import { LoginUserTypes } from "../types/LoginUser";
 
 const storedUser: string | null = localStorage.getItem("user");
 const user: DisplayUserTypes | null = storedUser ? JSON.parse(storedUser) : null;

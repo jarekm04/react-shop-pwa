@@ -1,9 +1,9 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import { DisplayUserTypes } from "../models/DisplayUser";
-import { NewUserTypes } from "../models/NewUser";
-import { LoginUserTypes } from "../models/LoginUser";
-import { DecodedJwtTypes, JwtTypes } from "../models/Jwt";
+import { DisplayUserTypes } from "../types/DisplayUser";
+import { NewUserTypes } from "../types/NewUser";
+import { LoginUserTypes } from "../types/LoginUser";
+import { DecodedJwtTypes, JwtTypes } from "../types/Jwt";
 import * as SimpleWebAuthnBrowser from "@simplewebauthn/browser";
 
 const register = async (newUser: NewUserTypes): Promise<DisplayUserTypes | null> => {

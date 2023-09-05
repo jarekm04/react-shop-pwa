@@ -5,7 +5,7 @@ import { useInput } from "@hooks/useInput";
 import { useAuth } from "@hooks/useAuth";
 import { validateEmail, validateName, validatePassword } from "@utils/validators";
 import { register, reset } from "../slicers/authSlice";
-import { NewUserTypes } from "../models/NewUser";
+import { NewUserTypes } from "../types/NewUser";
 
 const RegistrationForm = () => {
   const nameInput = useInput(validateName);

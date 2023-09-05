@@ -11,6 +11,7 @@ import {
 } from "@features/cart/services/cart.service";
 import { CartAction, CartStateTypes } from "@features/cart/types/Cart";
 
+// zrobić pobieranie cart najpierw z indexedDB
 const initialState: CartStateTypes = {
   cart: [],
   incrementProduct: () => null,
