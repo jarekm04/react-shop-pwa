@@ -9,6 +9,7 @@ export interface ProductTypes {
 export interface ProductDocumentTypes extends ProductTypes {
   _id: string;
   __v: number;
+  quantity: number;
 }
 
 export interface ProductStateTypes extends StatusStateTypes {

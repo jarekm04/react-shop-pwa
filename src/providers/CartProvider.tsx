@@ -3,17 +3,20 @@ import { ProductDocumentTypes } from "@features/products/types/Product";
 import {
   addProductToIDB,
   cartActions,
+  clearCartInIDB,
   decrementProduct,
   deleteProductFromIDB,
+  getAllProductsFromIDB,
   incrementProduct,
   resetCart,
   updateProductInIDB,
 } from "@features/cart/services/cart.service";
-import { CartAction, CartStateTypes } from "@features/cart/types/Cart";
+import { CartAction, CartStateTypes, CartTypes } from "@features/cart/types/Cart";
 
-// zrobić pobieranie cart najpierw z indexedDB
+const storedCart: CartTypes = await getAllProductsFromIDB();
+
 const initialState: CartStateTypes = {
-  cart: [],
+  cart: storedCart,
   incrementProduct: () => null,
   decrementProduct: () => null,
   resetCart: () => null,
@@ -72,6 +75,8 @@ const cartReducer = (state: CartStateTypes, action: CartAction) => {
       };
     }
     case cartActions.RESET_CART:
+      clearCartInIDB();
+
       return {
         ...state,
         cart: [],

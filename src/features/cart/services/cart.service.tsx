@@ -43,3 +43,21 @@ export const deleteProductFromIDB = async (key: string) => {
     console.log("Error: ", error);
   }
 };
+
+export const clearCartInIDB = async () => {
+  try {
+    await db.cart.clear();
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+};
+
+export const getAllProductsFromIDB = async () => {
+  try {
+    const products = await db.cart.toArray();
+    return products ? products : [];
+  } catch (error) {
+    console.log("Error: ", error);
+    return [];
+  }
+};

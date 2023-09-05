@@ -73,4 +73,9 @@ export default defineConfig({
       "@providers": path.resolve(__dirname, "./src/providers"),
     },
   },
+  css: {
+    modules: {
+      localsConvention: "camelCase",
+    },
+  },
 });

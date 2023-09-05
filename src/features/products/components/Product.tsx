@@ -22,7 +22,7 @@ const Product = ({ product }: { product: ProductDocumentTypes }) => {
       <CardMedia component='img' height='140' image='https://via.placeholder.com/300.png/09f/fff' alt='image' />
       <CardContent>
         <Typography gutterBottom variant='h5' component='div'>
-          $ {product.price}
+          {product.price} zł
         </Typography>
         {product.description && (
           <Typography variant='body2' color='text.secondary'>
@@ -42,9 +42,8 @@ const Product = ({ product }: { product: ProductDocumentTypes }) => {
         </Button>
         <span>{qty}</span>
         <Button
-          onClick={async () => {
+          onClick={() => {
             incrementProduct(product);
-            // addProductToIDB(product);
           }}
           size='large'
         >

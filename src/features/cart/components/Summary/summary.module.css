@@ -1,0 +1,23 @@
+.Container {
+  width: 80%;
+  margin: auto;
+}
+
+.Hr {
+  margin-top: 16px;
+}
+
+.Summary {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 20px;
+}
+
+.Subtotal {
+  margin-right: 16px;
+}
+
+.TotalPrice {
+  font-weight: 500;
+  margin-bottom: 48px;
+}
