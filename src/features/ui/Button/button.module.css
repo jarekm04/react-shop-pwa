@@ -1,0 +1,8 @@
+.Button {
+  text-transform: uppercase;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font-weight: 600;
+}

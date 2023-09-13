@@ -7,6 +7,8 @@ import { useAuth } from "@hooks/useAuth";
 import { addWebAuthnOptions, logout } from "@features/auth/slicers/authSlice";
 import { DisplayUserTypes } from "@features/auth/types/DisplayUser";
 import { useCart } from "@hooks/useCart";
+import Button2 from "@features/ui/Button";
+import CartIcon from "@features/ui/CartIcon";
 
 const Header = () => {
   const [cartCount, setCartCount] = useState(0);
@@ -48,18 +50,11 @@ const Header = () => {
           />
           <div style={{ display: "flex", gap: "20px" }}>
             <Button onClick={() => handleAddWebAuthnOptions(user)}>Add Authenticator / Passkey</Button>
-            <div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "7px" }}>
               <div>Hello, {user?.name}</div>
-              <Button onClick={handleLogout} sx={{ padding: 0, marginRight: "16px" }} color='inherit'>
-                Sign out
-              </Button>
+              <Button2 handleClick={handleLogout}>Sign out</Button2>
             </div>
-            <Button onClick={() => navigate("/cart")}>
-              <Badge badgeContent={cartCount} color='primary'>
-                <ShoppingCartOutlinedIcon fontSize='large' />
-              </Badge>
-              <span>Cart</span>
-            </Button>
+            <CartIcon cartCount={cartCount} />
           </div>
         </Toolbar>
       </AppBar>

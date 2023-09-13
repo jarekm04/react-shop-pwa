@@ -1,0 +1,35 @@
+.CartIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  border-radius: 10%;
+  color: #ff9900;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.2s ease-out;
+  position: relative;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+}
+
+.Icon {
+  width: 40px;
+  height: 40px;
+}
+
+.Badge {
+  position: absolute;
+  top: 0;
+  right: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  background-color: #ff9900;
+  color: #000000;
+  border-radius: 50%;
+}
