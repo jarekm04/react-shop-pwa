@@ -1,30 +1,34 @@
 import styles from "./button.module.css";
 
-type OptionProps = "primary" | "secondary";
+type OptionProps = "primary" | "secondary" | "tertiary" | "fourth";
 
-interface ButtonProps {
-  handleClick: () => void;
+interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
+  type?: "button" | "reset" | "submit";
+  handleClick?: () => void;
   children: React.ReactNode;
   option?: OptionProps;
+  disabled?: boolean;
 }
 
-const Button = ({ handleClick, option, children }: ButtonProps) => {
+export const Button = ({ type, handleClick, option, disabled, children }: ButtonProps) => {
   const switchOptions = (option?: OptionProps) => {
     switch (option) {
       case "primary":
         return styles.ButtonPrimary;
       case "secondary":
         return styles.ButtonSecondary;
+      case "tertiary":
+        return styles.ButtonTertiary;
+      case "fourth":
+        return styles.ButtonFourth;
       default:
         return styles.ButtonPrimary;
     }
   };
 
   return (
-    <button className={switchOptions(option)} onClick={handleClick}>
+    <button type={type} className={switchOptions(option)} onClick={handleClick} disabled={disabled}>
       {children}
     </button>
   );
 };
-
-export default Button;

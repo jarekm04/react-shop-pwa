@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { AiOutlineShoppingCart } from "react-icons/ai";
-import Badge from "./Badge";
+import { Badge } from "./Badge";
 import styles from "./cartIcon.module.css";
 
-const CartIcon = ({ cartCount }: { cartCount: number }) => {
+export const CartIcon = ({ cartCount }: { cartCount: number }) => {
   const navigate = useNavigate();
 
   return (
@@ -14,5 +14,3 @@ const CartIcon = ({ cartCount }: { cartCount: number }) => {
     </div>
   );
 };
-
-export default CartIcon;

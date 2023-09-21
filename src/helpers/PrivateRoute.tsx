@@ -2,7 +2,7 @@ import { useAppDispatch } from "@app/store";
 import { useAuth } from "@hooks/useAuth";
 import { useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import { verifyJwt } from "../slicers/authSlice";
+import { verifyJwt } from "../features/auth/slicers/authSlice";
 
 const PrivateRoute = ({ page }: { page: JSX.Element }) => {
   const { isAuthenticated, jwt } = useAuth();

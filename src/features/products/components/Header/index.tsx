@@ -5,9 +5,9 @@ import { useAuth } from "@hooks/useAuth";
 import { useCart } from "@hooks/useCart";
 import { addWebAuthnOptions, logout } from "@features/auth/slicers/authSlice";
 import { DisplayUserTypes } from "@features/auth/types/DisplayUser";
-import Button from "@features/ui/Button";
-import CartIcon from "@features/ui/CartIcon";
-import Logo from "@features/ui/Logo";
+import { Button } from "@features/ui/Button";
+import { CartIcon } from "@features/ui/CartIcon";
+import { Logo } from "@features/ui/Logo";
 import styles from "./header.module.css";
 
 const Header = () => {

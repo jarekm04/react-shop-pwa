@@ -1,0 +1,29 @@
+.RegistrationFooter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 350px;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.SignInFooter {
+  margin-top: 16px;
+}
+
+.Conditions {
+  font-size: 13px;
+  font-weight: 300;
+}
+
+.Links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.Link {
+  color: #0000ee;
+  text-decoration: none;
+}

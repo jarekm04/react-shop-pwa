@@ -1,0 +1,42 @@
+.Wrapper {
+  width: 350px;
+  padding: 16px;
+  margin-top: 16px;
+  border: 1px solid #cccccc;
+}
+
+.Container {
+  display: grid;
+}
+
+.Headline {
+  font-weight: 400;
+  font-size: 34px;
+}
+
+.Conditions {
+  font-size: 13px;
+  margin-top: 30px;
+  font-weight: 300;
+}
+
+.Box {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 16px;
+}
+
+.WebAuthn {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.BtnWrapper {
+  margin-top: 16px;
+}
+
+.Link {
+  color: #0000ee;
+  text-decoration: none;
+}

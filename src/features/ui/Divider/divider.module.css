@@ -1,0 +1,19 @@
+.Divider {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 16px 0;
+}
+
+.Divider::before,
+.Divider::after {
+  content: "";
+  flex-grow: 1;
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.12);
+}
+
+.Text {
+  color: #767676;
+  margin: 0 16px;
+}
