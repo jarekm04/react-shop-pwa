@@ -4,5 +4,9 @@
   box-sizing: border-box;
 }
 
+body {
+  font-family: "Roboto","Helvetica","Arial",sans-serif;
+}
+
 /* primary-color: #383a3e */
 /* secondary-color: #2596be */

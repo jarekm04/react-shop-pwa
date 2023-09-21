@@ -1,8 +1,18 @@
-.Button {
-  text-transform: uppercase;
+.ButtonPrimary {
+  font-size: 14px;
+  font-weight: 600;
+  border: 0;
   color: inherit;
   background: transparent;
-  border: 0;
+  text-transform: uppercase;
   cursor: pointer;
-  font-weight: 600;
+}
+
+.ButtonSecondary {
+  font-size: 14px;
+  border: 0;
+  color: #FF9900;
+  background: transparent;
+  text-transform: uppercase;
+  cursor: pointer;
 }

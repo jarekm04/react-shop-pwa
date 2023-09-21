@@ -1,6 +1,6 @@
-import styles from "./list.module.css";
 import { useCart } from "@hooks/useCart";
-import { CartItemTypes } from "../../types/Cart";
+import { CartItemTypes } from "@features/cart/types/Cart";
+import styles from "./list.module.css";
 
 const Item = ({ name, price, quantity }: CartItemTypes) => {
   return (

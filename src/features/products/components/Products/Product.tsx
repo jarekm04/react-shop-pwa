@@ -1,6 +1,6 @@
 import { Card, CardActions, CardContent, CardMedia, Button, Typography } from "@mui/material";
-import { ProductDocumentTypes } from "../types/Product";
-import { db } from "../../../db";
+import { ProductDocumentTypes } from "../../types/Product";
+import { db } from "../../../../db";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useCart } from "@hooks/useCart";
 

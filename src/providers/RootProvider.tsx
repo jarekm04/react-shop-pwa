@@ -5,7 +5,7 @@ import Register from "@pages/Register";
 import SignIn from "@pages/SignIn";
 import Cart from "@pages/Cart";
 
-const RootProvider = () => {
+export const RootProvider = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
@@ -20,5 +20,3 @@ const RootProvider = () => {
 
   return <RouterProvider router={router} />;
 };
-
-export default RootProvider;

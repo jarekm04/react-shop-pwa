@@ -1,5 +1,5 @@
 import { useProducts } from "@hooks/useProducts";
-import Product from "../Product";
+import Product from "./Product";
 import styles from "./products.module.css";
 
 const Products = () => {
