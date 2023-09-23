@@ -30,6 +30,15 @@ export type SignInWithWebAuthnAction =
   | { type: "SIGNINWITHWEBAUTHN_FULFILLED"; payload: { data } }
   | { type: "SIGNINWITHWEBAUTHN_REJECTED" };
 
+export type AuthAction =
+  | RegisterAction
+  | LoginAction
+  | LogoutAction
+  | VerifyJwtAction
+  | AddWebAuthnOptions
+  | CheckAuthOptionsAction
+  | SignInWithWebAuthnAction;
+
 export interface AuthActionsTypes {
   REGISTER_PENDING: "REGISTER_PENDING";
   REGISTER_FULFILLED: "REGISTER_FULFILLED";

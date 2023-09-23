@@ -14,7 +14,7 @@ const user: DisplayUserTypes | null = storedUser ? JSON.parse(storedUser) : null
 const storedJwt: string | null = localStorage.getItem("jwt");
 const jwt: JwtTypes = storedJwt ? JSON.parse(storedJwt) : null;
 
-const initialState: AuthStateTypes = {
+const initialState = {
   user: user,
   jwt: jwt,
   isAuthenticated: false,
@@ -169,9 +169,9 @@ export const authSlice = createSlice({
       })
       // WEBAUTHN LOGIN
       .addCase(signInWithWebAuthn.pending, (state) => {
-        state.isLoading = false;
+        state.isLoading = true;
         state.isSuccess = false;
-        state.isError = true;
+        state.isError = false;
         state.user = null;
       })
       .addCase(signInWithWebAuthn.fulfilled, (state, action) => {

@@ -1,4 +1,6 @@
 import axios from "axios";
+import jwt_decode from "jwt-decode";
+import * as SimpleWebAuthnBrowser from "@simplewebauthn/browser";
 import { NewUserTypes } from "../types/NewUser";
 import { LoginUserTypes } from "../types/LoginUser";
 import { DisplayUserTypes } from "../types/DisplayUser";
@@ -37,7 +39,13 @@ export const authActions: AuthActionsTypes = {
   SIGNINWITHWEBAUTHN_REJECTED: "SIGNINWITHWEBAUTHN_REJECTED",
 };
 
-export const register = async ({ dispatch, value }: { dispatch: (type: RegisterAction) => void; value: NewUserTypes}) => {
+export const register = async ({
+  dispatch,
+  newUser,
+}: {
+  dispatch: (type: RegisterAction) => void;
+  newUser: NewUserTypes;
+}) => {
   dispatch({ type: authActions.REGISTER_PENDING });
 
   try {
@@ -50,11 +58,11 @@ export const register = async ({ dispatch, value }: { dispatch: (type: RegisterA
   }
 };
 
-export const login = async (dispatch: (value: LoginAction) => void) => {
+export const login = async ({ dispatch, user }: { dispatch: (value: LoginAction) => void; user: LoginUserTypes }) => {
   dispatch({ type: authActions.LOGIN_PENDING });
 
   try {
-    const response = await axios.get<LoginUserTypes>(`${import.meta.env.VITE_API_HOST}/auth/login`);
+    const response = await axios.post(`${import.meta.env.VITE_API_HOST}/auth/login`, user);
     dispatch({ type: authActions.LOGIN_FULFILLED, payload: response });
   } catch (error) {
     console.log("Error: ", error);
@@ -77,11 +85,17 @@ export const logout = async (dispatch: (value: LogoutAction) => void) => {
   }
 };
 
-export const verifyJwt = async (dispatch: (value: VerifyJwtAction) => void) => {
+export const verifyJwt = async ({ dispatch, jwt }: { dispatch: (value: VerifyJwtAction) => void; jwt: string }) => {
   dispatch({ type: authActions.VERIFYJWT_PENDING });
 
   try {
-    const response = await axios.get<string>(`${import.meta.env.VITE_API_HOST}/auth/verify-jwt`);
+    const response = await axios.post(`${import.meta.env.VITE_API_HOST}/auth/verify-jwt`, { jwt });
+
+    if (!response.data) return false;
+
+    const jwtExpirationMs = response.data.exp * 1000;
+    return jwtExpirationMs > Date.now();
+
     dispatch({ type: authActions.VERIFYJWT_FULFILLED, payload: response });
   } catch (error) {
     console.log("Error: ", error);
@@ -90,28 +104,68 @@ export const verifyJwt = async (dispatch: (value: VerifyJwtAction) => void) => {
   }
 };
 
-export const addWebAuthnOptions = async (dispatch: (value: AddWebAuthnOptions) => void) => {
+export const addWebAuthnOptions = async ({
+  dispatch,
+  user,
+}: {
+  dispatch: (value: AddWebAuthnOptions) => void;
+  user: DisplayUserTypes;
+}) => {
   dispatch({ type: authActions.ADDWEBAUTHNOPTIONS_PENDING });
 
-  try {
-    const response = await axios.get<DisplayUserTypes>(
-      `${import.meta.env.VITE_API_HOST}/webauthn/registration-options`
-    );
-    // "http://localhost:3000/api/webauthn/registration-verification"
-    dispatch({ type: authActions.ADDWEBAUTHNOPTIONS_FULFILLED, payload: response });
-  } catch (error) {
-    console.log("Error: ", error);
+  const registrationRes = await fetch(`${import.meta.env.VITE_API_HOST}/webauthn/registration-options`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(user),
+  });
+
+  const options = await registrationRes.json();
+  options.authenticatorSelection.residentKey = "required";
+  options.authenticatorSelection.requireResidentKey = true;
+  options.extensions = {
+    credProps: true,
+  };
+
+  const authRes = await SimpleWebAuthnBrowser.startRegistration(options);
+
+  const verificationRes = await fetch(`${import.meta.env.VITE_API_HOST}/webauthn/registration-verification`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ user, data: authRes }),
+  });
+
+  const data = await verificationRes.json();
+
+  if (verificationRes.ok) {
+    dispatch({ type: authActions.ADDWEBAUTHNOPTIONS_FULFILLED, payload: data });
+    alert("You can now login using the new registered method!");
+  } else {
     dispatch({ type: authActions.ADDWEBAUTHNOPTIONS_REJECTED });
+    alert("Oops something went wrong!");
     throw new Error("Unable to add WebAuthn Options!");
   }
 };
 
-export const checkAuthOptions = async (dispatch: (value: CheckAuthOptionsAction) => void) => {
+export const checkAuthOptions = async ({
+  dispatch,
+  email,
+}: {
+  dispatch: (value: CheckAuthOptionsAction) => void;
+  email: string;
+}) => {
   dispatch({ type: authActions.CHECKAUTHOPTIONS_PENDING });
 
   try {
-    const response = await axios.get<string>(`${import.meta.env.VITE_API_HOST}/webauthn/auth-options`);
+    const response = await axios.post(`${import.meta.env.VITE_API_HOST}/webauthn/auth-options`, {
+      email,
+    });
+    const data = response.data;
     dispatch({ type: authActions.CHECKAUTHOPTIONS_FULFILLED, payload: response });
+    return data;
   } catch (error) {
     console.log("Error: ", error);
     dispatch({ type: authActions.CHECKAUTHOPTIONS_REJECTED });
@@ -119,16 +173,40 @@ export const checkAuthOptions = async (dispatch: (value: CheckAuthOptionsAction)
   }
 };
 
-export const signInWithWebAuthn = async (dispatch: (value: SignInWithWebAuthnAction) => void) => {
+export const signInWithWebAuthn = async ({
+  dispatch,
+  email,
+}: {
+  dispatch: (value: SignInWithWebAuthnAction) => void;
+  email: string;
+}) => {
   dispatch({ type: authActions.SIGNINWITHWEBAUTHN_PENDING });
 
+  const optionsResponse = await axios.post(`${import.meta.env.VITE_API_HOST}/webauthn/login-options`, {
+    email: email,
+  });
+
+  const optionsRes = optionsResponse.data;
+  const loginRes = await SimpleWebAuthnBrowser.startAuthentication(optionsRes);
+
   try {
-    const response = await axios.get<string>(`${import.meta.env.VITE_API_HOST}/webauthn/login-options`);
-    // await axios.post(`${import.meta.env.VITE_API_HOST}/webauthn/login-verification`, {
-    dispatch({ type: authActions.SIGNINWITHWEBAUTHN_FULFILLED, payload: response });
+    const verificationResponse = await axios.post(`${import.meta.env.VITE_API_HOST}/webauthn/login-verification`, {
+      email: email,
+      data: loginRes,
+    });
+
+    const data = verificationResponse.data;
+
+    if (data !== undefined || data !== null) {
+      localStorage.setItem("user", JSON.stringify(data.user));
+      dispatch({ type: authActions.SIGNINWITHWEBAUTHN_FULFILLED, payload: data });
+      return data;
+    } else {
+      return null;
+    }
   } catch (error) {
-    console.log("Error: ", error);
     dispatch({ type: authActions.SIGNINWITHWEBAUTHN_REJECTED });
+    alert("Wrong credentials");
     throw new Error("Unable to sign in with WebAuthn!");
   }
 };

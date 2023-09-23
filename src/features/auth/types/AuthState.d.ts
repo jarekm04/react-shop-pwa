@@ -1,5 +1,7 @@
 import { DisplayUserTypes } from "./DisplayUser";
 import { JwtTypes } from "./Jwt";
+import { LoginUserTypes } from "./LoginUser";
+import { NewUserTypes } from "./NewUser";
 import { StatusStateTypes } from "@types/index";
 
 export interface AuthStateTypes extends StatusStateTypes {
@@ -8,11 +10,11 @@ export interface AuthStateTypes extends StatusStateTypes {
   isAuthenticated?: boolean;
   userEmail?: string;
   userHasWebAuthn?: boolean;
-  register: () => unknown;
-  login: () => unknown;
+  register: (newUser: NewUserTypes) => unknown;
+  login: (user: LoginUserTypes) => unknown;
   logout: () => unknown;
-  verifyJwt: () => unknown;
-  addWebAuthnOptions: () => unknown;
-  checkAuthOptions: () => unknown;
-  signInWithWebAuthn: () => unknown;
+  verifyJwt: (jwt: string) => unknown;
+  addWebAuthnOptions: (user: DisplayUserTypes) => unknown;
+  checkAuthOptions: (email: string) => unknown;
+  signInWithWebAuthn: (email: string) => unknown;
 }

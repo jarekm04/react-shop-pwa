@@ -8,11 +8,11 @@ const PrivateRoute = ({ page }: { page: JSX.Element }) => {
   const { isAuthenticated, jwt } = useAuth();
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    if (!jwt || !jwt.token) return;
+  // useEffect(() => {
+  //   if (!jwt || !jwt.token) return;
 
-    dispatch(verifyJwt(jwt.token));
-  }, [dispatch, jwt]);
+  //   dispatch(verifyJwt(jwt.token));
+  // }, [dispatch, jwt]);
 
   return isAuthenticated ? page : <Navigate replace to='/signin' />;
 };

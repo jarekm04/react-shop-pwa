@@ -6,9 +6,10 @@ import { useAuth } from "@hooks/useAuth";
 import { Button } from "@features/ui/Button";
 import { Label } from "@features/ui/Label";
 import { Input } from "@features/ui/Input";
-import { checkAuthOptions, login, signInWithWebAuthn } from "../../slicers/authSlice";
+import { checkAuthOptions, login as loginREDUX, signInWithWebAuthn } from "../../slicers/authSlice";
 import { validateEmail, validatePassword } from "@utils/validators";
 import styles from "./signInForm.module.css";
+import { useAuth2 } from "@hooks/useAuth2";
 
 const SignInForm = () => {
   const [isUserExists, setIsUserExists] = useState(false);
@@ -16,6 +17,7 @@ const SignInForm = () => {
   const emailInput = useInput(validateEmail);
   const passwordInput = useInput(validatePassword);
   const { isAuthenticated, userEmail, userHasWebAuthn } = useAuth();
+  const { login } = useAuth2();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -44,7 +46,8 @@ const SignInForm = () => {
         password: passwordInput.text,
       };
 
-      dispatch(login(user));
+      dispatch(loginREDUX(user));
+      login(user);
       navigate("/");
     }
   };
