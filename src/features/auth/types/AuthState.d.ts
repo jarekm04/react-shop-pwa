@@ -8,4 +8,11 @@ export interface AuthStateTypes extends StatusStateTypes {
   isAuthenticated?: boolean;
   userEmail?: string;
   userHasWebAuthn?: boolean;
+  register: () => unknown;
+  login: () => unknown;
+  logout: () => unknown;
+  verifyJwt: () => unknown;
+  addWebAuthnOptions: () => unknown;
+  checkAuthOptions: () => unknown;
+  signInWithWebAuthn: () => unknown;
 }
