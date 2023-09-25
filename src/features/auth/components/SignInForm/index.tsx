@@ -1,24 +1,19 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAppDispatch } from "@app/store";
 import { useInput } from "@hooks/useInput";
 import { useAuth } from "@hooks/useAuth";
 import { Button } from "@features/ui/Button";
 import { Label } from "@features/ui/Label";
 import { Input } from "@features/ui/Input";
-import { checkAuthOptions, login as loginREDUX, signInWithWebAuthn } from "../../slicers/authSlice";
 import { validateEmail, validatePassword } from "@utils/validators";
 import styles from "./signInForm.module.css";
-import { useAuth2 } from "@hooks/useAuth2";
 
 const SignInForm = () => {
+  const { login, isAuthenticated, checkAuthOptions, userEmail, userHasWebAuthn, signInWithWebAuthn } = useAuth();
   const [isUserExists, setIsUserExists] = useState(false);
   const [isWebAuthn, setIsWebAuthn] = useState(false);
   const emailInput = useInput(validateEmail);
   const passwordInput = useInput(validatePassword);
-  const { isAuthenticated, userEmail, userHasWebAuthn } = useAuth();
-  const { login } = useAuth2();
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,22 +26,17 @@ const SignInForm = () => {
     if (userHasWebAuthn) setIsWebAuthn(true);
   }, [userEmail, userHasWebAuthn]);
 
-  const handleCheckAuthOptions = async () => {
-    dispatch(checkAuthOptions(emailInput.text));
-  };
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!isUserExists) {
-      handleCheckAuthOptions();
+      checkAuthOptions(emailInput.text);
     } else {
       const user = {
         email: emailInput.text,
         password: passwordInput.text,
       };
 
-      dispatch(loginREDUX(user));
       login(user);
       navigate("/");
     }
@@ -90,9 +80,12 @@ const SignInForm = () => {
 
           {isWebAuthn && (
             <div className={styles.WebAuthn}>
-              <Button handleClick={() => dispatch(signInWithWebAuthn(emailInput.text))} option='secondary'>
+              {/* <Button handleClick={() => signInWithWebAuthn(emailInput.text)} option='secondary'>
                 Sign In with WebAuthn / Passkey
-              </Button>
+              </Button> */}
+              <div onClick={() => signInWithWebAuthn(emailInput.text)}>
+                Sign In with WebAuthn / Passkey
+              </div>
             </div>
           )}
 

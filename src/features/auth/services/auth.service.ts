@@ -12,6 +12,7 @@ const register = async (newUser: NewUserTypes): Promise<DisplayUserTypes | null>
 };
 
 const login = async (user: LoginUserTypes): Promise<{ jwt: JwtTypes; user: DisplayUserTypes | null }> => {
+  console.log(user);
   const response = await axios.post(`${import.meta.env.VITE_API_HOST}/auth/login`, user);
 
   if (response.data) {

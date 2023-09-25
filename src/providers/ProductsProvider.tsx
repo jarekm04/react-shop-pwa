@@ -1,6 +1,7 @@
 import { createContext, useReducer } from "react";
 import { ProductAction, ProductStateTypes } from "@features/products/types/Product";
-import { getProducts, productActions } from "@features/products/services/product.service";
+import { getProducts } from "@features/products/services/product.service";
+import { productActions } from "@features/products/services/product.actions";
 
 const initialState: ProductStateTypes = {
   products: [],

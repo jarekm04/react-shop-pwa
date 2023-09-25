@@ -4,7 +4,6 @@ import { DisplayUserTypes } from "@features/auth/types/DisplayUser";
 import { AuthStateTypes } from "@features/auth/types/AuthState";
 import {
   addWebAuthnOptions,
-  authActions,
   checkAuthOptions,
   login,
   logout,
@@ -12,6 +11,7 @@ import {
   signInWithWebAuthn,
   verifyJwt,
 } from "@features/auth/services/auth2.service";
+import { authActions } from "@features/auth/services/auth.actions";
 import { AuthAction } from "@features/auth/types/AuthActions";
 import { NewUserTypes } from "@features/auth/types/NewUser";
 import { LoginUserTypes } from "@features/auth/types/LoginUser";
@@ -43,12 +43,12 @@ const initialState: AuthStateTypes = {
 export const AuthContext = createContext(initialState);
 
 const authReducer = (state: AuthStateTypes, action: AuthAction) => {
+  console.log(action)
   switch (action.type) {
     case authActions.REGISTER_PENDING:
     case authActions.LOGIN_PENDING:
     case authActions.VERIFYJWT_PENDING:
     case authActions.ADDWEBAUTHNOPTIONS_PENDING:
-    case authActions.CHECKAUTHOPTIONS_PENDING:
     case authActions.SIGNINWITHWEBAUTHN_PENDING:
       return {
         ...state,
@@ -80,6 +80,7 @@ const authReducer = (state: AuthStateTypes, action: AuthAction) => {
         isError: false,
         user: action.payload.data.user,
         jwt: action.payload.data.jwt,
+        isAuthenticated: true,
       };
     case authActions.LOGIN_REJECTED:
       return {
@@ -105,24 +106,34 @@ const authReducer = (state: AuthStateTypes, action: AuthAction) => {
     case authActions.VERIFYJWT_FULFILLED:
       return {
         ...state,
+        isSuccess: true,
         isLoading: false,
         isError: false,
-        isSuccess: true,
         isAuthenticated: action.payload.data,
       };
     case authActions.VERIFYJWT_REJECTED:
       return {
         ...state,
+        isSuccess: false,
         isLoading: false,
         isError: true,
-        isSuccess: false,
         isAuthenticated: false,
       };
     // ADD WEBAUTHN OPTIONS
     case authActions.ADDWEBAUTHNOPTIONS_FULFILLED:
-      return {};
+      return {
+        ...state,
+        isSuccess: true,
+        isLoading: false,
+        isError: false,
+      };
     case authActions.ADDWEBAUTHNOPTIONS_REJECTED:
-      return {};
+      return {
+        ...state,
+        isSuccess: false,
+        isLoading: false,
+        isError: true,
+      };
     // WEBAUTHN CHECK OPTIONS
     case authActions.CHECKAUTHOPTIONS_FULFILLED:
       return {
@@ -140,18 +151,12 @@ const authReducer = (state: AuthStateTypes, action: AuthAction) => {
     case authActions.SIGNINWITHWEBAUTHN_FULFILLED:
       return {
         ...state,
-        isLoading: false,
-        isError: false,
-        isSuccess: true,
-        user: action.payload.data.user,
+        user: action.payload.user,
         isAuthenticated: true,
       };
     case authActions.SIGNINWITHWEBAUTHN_REJECTED:
       return {
         ...state,
-        isLoading: false,
-        isError: true,
-        isSuccess: false,
         user: null,
         isAuthenticated: false,
       };

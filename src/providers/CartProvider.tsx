@@ -2,7 +2,6 @@ import { createContext, useReducer } from "react";
 import { ProductDocumentTypes } from "@features/products/types/Product";
 import {
   addProductToIDB,
-  cartActions,
   clearCartInIDB,
   decrementProduct,
   deleteProductFromIDB,
@@ -11,6 +10,7 @@ import {
   resetCart,
   updateProductInIDB,
 } from "@features/cart/services/cart.service";
+import { cartActions } from "@features/cart/services/cart.actions";
 import { CartAction, CartStateTypes, CartTypes } from "@features/cart/types/Cart";
 
 const storedCart: CartTypes = await getAllProductsFromIDB();

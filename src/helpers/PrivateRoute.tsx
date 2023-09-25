@@ -1,18 +1,15 @@
-import { useAppDispatch } from "@app/store";
-import { useAuth } from "@hooks/useAuth";
 import { useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import { verifyJwt } from "../features/auth/slicers/authSlice";
+import { useAuth } from "@hooks/useAuth";
 
 const PrivateRoute = ({ page }: { page: JSX.Element }) => {
-  const { isAuthenticated, jwt } = useAuth();
-  const dispatch = useAppDispatch();
+  const { isAuthenticated, jwt, verifyJwt } = useAuth();
 
-  // useEffect(() => {
-  //   if (!jwt || !jwt.token) return;
+  useEffect(() => {
+    if (!jwt || !jwt.token) return;
 
-  //   dispatch(verifyJwt(jwt.token));
-  // }, [dispatch, jwt]);
+    verifyJwt(jwt.token);
+  }, [jwt]);
 
   return isAuthenticated ? page : <Navigate replace to='/signin' />;
 };

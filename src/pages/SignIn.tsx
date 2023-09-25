@@ -5,9 +5,9 @@ import { SignInFooter } from "@features/auth/components/Footer";
 import SignInForm from "@features/auth/components/SignInForm";
 
 const SignIn = () => {
-  const { isLoading } = useAuth();
+  // const { isLoading } = useAuth();
 
-  if (isLoading) return <Spinner />;
+  // if (isLoading) return <Spinner />;
 
   return (
     <AuthLayout>

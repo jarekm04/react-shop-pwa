@@ -1,11 +1,10 @@
-import { useMemo } from "react";
-import { useAppSelector } from "@app/store";
+import { useContext } from "react";
+import { AuthContext } from "@providers/AuthProvider";
 
 export const useAuth = () => {
-  const { isError, isLoading, isSuccess, isAuthenticated, jwt, user, userEmail, userHasWebAuthn } = useAppSelector((state) => state.auth);
-
-  return useMemo(
-    () => ({ isError, isLoading, isSuccess, isAuthenticated, jwt, user, userEmail, userHasWebAuthn }),
-    [isError, isLoading, isSuccess, isAuthenticated, jwt, user, userEmail, userHasWebAuthn]
-  );
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useProductContext must be used within a ProductProvider");
+  }
+  return context;
 };

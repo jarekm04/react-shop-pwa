@@ -1,12 +1,12 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import * as SimpleWebAuthnBrowser from "@simplewebauthn/browser";
+import { authActions } from "./auth.actions";
 import { NewUserTypes } from "../types/NewUser";
 import { LoginUserTypes } from "../types/LoginUser";
 import { DisplayUserTypes } from "../types/DisplayUser";
 import {
   AddWebAuthnOptions,
-  AuthActionsTypes,
   CheckAuthOptionsAction,
   LoginAction,
   LogoutAction,
@@ -14,30 +14,7 @@ import {
   SignInWithWebAuthnAction,
   VerifyJwtAction,
 } from "../types/AuthActions";
-
-export const authActions: AuthActionsTypes = {
-  REGISTER_PENDING: "REGISTER_PENDING",
-  REGISTER_FULFILLED: "REGISTER_FULFILLED",
-  REGISTER_REJECTED: "REGISTER_REJECTED",
-  LOGIN_PENDING: "LOGIN_PENDING",
-  LOGIN_FULFILLED: "LOGIN_FULFILLED",
-  LOGIN_REJECTED: "LOGIN_REJECTED",
-  LOGOUT_PENDING: "LOGOUT_PENDING",
-  LOGOUT_FULFILLED: "LOGOUT_FULFILLED",
-  LOGOUT_REJECTED: "LOGOUT_REJECTED",
-  VERIFYJWT_PENDING: "VERIFYJWT_PENDING",
-  VERIFYJWT_FULFILLED: "VERIFYJWT_FULFILLED",
-  VERIFYJWT_REJECTED: "VERIFYJWT_REJECTED",
-  ADDWEBAUTHNOPTIONS_PENDING: "ADDWEBAUTHNOPTIONS_PENDING",
-  ADDWEBAUTHNOPTIONS_FULFILLED: "ADDWEBAUTHNOPTIONS_FULFILLED",
-  ADDWEBAUTHNOPTIONS_REJECTED: "ADDWEBAUTHNOPTIONS_REJECTED",
-  CHECKAUTHOPTIONS_PENDING: "CHECKAUTHOPTIONS_PENDING",
-  CHECKAUTHOPTIONS_FULFILLED: "CHECKAUTHOPTIONS_FULFILLED",
-  CHECKAUTHOPTIONS_REJECTED: "CHECKAUTHOPTIONS_REJECTED",
-  SIGNINWITHWEBAUTHN_PENDING: "SIGNINWITHWEBAUTHN_PENDING",
-  SIGNINWITHWEBAUTHN_FULFILLED: "SIGNINWITHWEBAUTHN_FULFILLED",
-  SIGNINWITHWEBAUTHN_REJECTED: "SIGNINWITHWEBAUTHN_REJECTED",
-};
+import { DecodedJwtTypes } from "../types/Jwt";
 
 export const register = async ({
   dispatch,
@@ -64,6 +41,12 @@ export const login = async ({ dispatch, user }: { dispatch: (value: LoginAction)
   try {
     const response = await axios.post(`${import.meta.env.VITE_API_HOST}/auth/login`, user);
     dispatch({ type: authActions.LOGIN_FULFILLED, payload: response });
+
+    if (response.data) {
+      localStorage.setItem("jwt", JSON.stringify(response.data));
+      const decodedJwt: DecodedJwtTypes = jwt_decode(response.data.token);
+      localStorage.setItem("user", JSON.stringify(decodedJwt.user));
+    }
   } catch (error) {
     console.log("Error: ", error);
     dispatch({ type: authActions.LOGIN_REJECTED });
@@ -90,13 +73,12 @@ export const verifyJwt = async ({ dispatch, jwt }: { dispatch: (value: VerifyJwt
 
   try {
     const response = await axios.post(`${import.meta.env.VITE_API_HOST}/auth/verify-jwt`, { jwt });
+    dispatch({ type: authActions.VERIFYJWT_FULFILLED, payload: response });
 
     if (!response.data) return false;
 
     const jwtExpirationMs = response.data.exp * 1000;
     return jwtExpirationMs > Date.now();
-
-    dispatch({ type: authActions.VERIFYJWT_FULFILLED, payload: response });
   } catch (error) {
     console.log("Error: ", error);
     dispatch({ type: authActions.VERIFYJWT_REJECTED });
@@ -113,41 +95,70 @@ export const addWebAuthnOptions = async ({
 }) => {
   dispatch({ type: authActions.ADDWEBAUTHNOPTIONS_PENDING });
 
-  const registrationRes = await fetch(`${import.meta.env.VITE_API_HOST}/webauthn/registration-options`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(user),
+  const registrationRes = await axios.post(`${import.meta.env.VITE_API_HOST}/webauthn/registration-options`, {
+    user,
   });
+  console.log(registrationRes);
 
-  const options = await registrationRes.json();
+  const options = await registrationRes.data;
   options.authenticatorSelection.residentKey = "required";
   options.authenticatorSelection.requireResidentKey = true;
   options.extensions = {
     credProps: true,
   };
 
-  const authRes = await SimpleWebAuthnBrowser.startRegistration(options);
+  // const authRes = await SimpleWebAuthnBrowser.startRegistration(options);
 
-  const verificationRes = await fetch(`${import.meta.env.VITE_API_HOST}/webauthn/registration-verification`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ user, data: authRes }),
-  });
+  // const verificationRes = await axios.post(`${import.meta.env.VITE_API_HOST}/webauthn/registration-verification`, {
+  //   user,
+  //   data: authRes,
+  // });
 
-  const data = await verificationRes.json();
+  // const data = verificationRes.data;
 
-  if (verificationRes.ok) {
-    dispatch({ type: authActions.ADDWEBAUTHNOPTIONS_FULFILLED, payload: data });
-    alert("You can now login using the new registered method!");
-  } else {
-    dispatch({ type: authActions.ADDWEBAUTHNOPTIONS_REJECTED });
-    alert("Oops something went wrong!");
-    throw new Error("Unable to add WebAuthn Options!");
-  }
+  // if (verificationRes.ok) {
+  //   dispatch({ type: authActions.ADDWEBAUTHNOPTIONS_FULFILLED, payload: data });
+  //   alert("You can now login using the new registered method!");
+  // } else {
+  //   dispatch({ type: authActions.ADDWEBAUTHNOPTIONS_REJECTED });
+  //   alert("Oops something went wrong!");
+  // }
+
+  // const registrationRes = await fetch(`${import.meta.env.VITE_API_HOST}/webauthn/registration-options`, {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify(user),
+  // });
+
+  // const options = await registrationRes.json();
+  // options.authenticatorSelection.residentKey = "required";
+  // options.authenticatorSelection.requireResidentKey = true;
+  // options.extensions = {
+  //   credProps: true,
+  // };
+
+  // const authRes = await SimpleWebAuthnBrowser.startRegistration(options);
+
+  // const verificationRes = await fetch(`${import.meta.env.VITE_API_HOST}/webauthn/registration-verification`, {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify({ user, data: authRes }),
+  // });
+
+  // const data = await verificationRes.json();
+
+  // if (verificationRes.ok) {
+  //   dispatch({ type: authActions.ADDWEBAUTHNOPTIONS_FULFILLED, payload: data });
+  //   alert("You can now login using the new registered method!");
+  // } else {
+  //   dispatch({ type: authActions.ADDWEBAUTHNOPTIONS_REJECTED });
+  //   alert("Oops something went wrong!");
+  //   throw new Error("Unable to add WebAuthn Options!");
+  // }
 };
 
 export const checkAuthOptions = async ({
@@ -163,9 +174,7 @@ export const checkAuthOptions = async ({
     const response = await axios.post(`${import.meta.env.VITE_API_HOST}/webauthn/auth-options`, {
       email,
     });
-    const data = response.data;
     dispatch({ type: authActions.CHECKAUTHOPTIONS_FULFILLED, payload: response });
-    return data;
   } catch (error) {
     console.log("Error: ", error);
     dispatch({ type: authActions.CHECKAUTHOPTIONS_REJECTED });
@@ -200,13 +209,12 @@ export const signInWithWebAuthn = async ({
     if (data !== undefined || data !== null) {
       localStorage.setItem("user", JSON.stringify(data.user));
       dispatch({ type: authActions.SIGNINWITHWEBAUTHN_FULFILLED, payload: data });
-      return data;
     } else {
       return null;
     }
   } catch (error) {
-    dispatch({ type: authActions.SIGNINWITHWEBAUTHN_REJECTED });
     alert("Wrong credentials");
+    dispatch({ type: authActions.SIGNINWITHWEBAUTHN_REJECTED });
     throw new Error("Unable to sign in with WebAuthn!");
   }
 };

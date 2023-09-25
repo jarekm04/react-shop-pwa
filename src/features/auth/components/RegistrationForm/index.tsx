@@ -1,20 +1,19 @@
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "@app/store";
 import { useInput } from "@hooks/useInput";
+import { useAuth } from "@hooks/useAuth";
 import { Label } from "@features/ui/Label";
 import { Input } from "@features/ui/Input";
 import { Button } from "@features/ui/Button";
 import { validateEmail, validateName, validatePassword } from "@utils/validators";
 import styles from "./registrationForm.module.css";
-import { register, reset } from "../../slicers/authSlice";
 import { NewUserTypes } from "../../types/NewUser";
 
 const RegistrationForm = () => {
+  const { register } = useAuth();
   const nameInput = useInput(validateName);
   const emailInput = useInput(validateEmail);
   const passwordInput = useInput(validatePassword);
   const confirmPasswordInput = useInput(validatePassword);
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const clearForm = () => {
@@ -33,8 +32,7 @@ const RegistrationForm = () => {
       password: passwordInput.text,
     };
 
-    dispatch(register(newUser));
-    dispatch(reset());
+    register(newUser);
     clearForm();
     navigate("/signin");
   };

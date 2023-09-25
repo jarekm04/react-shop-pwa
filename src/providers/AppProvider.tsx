@@ -8,13 +8,13 @@ import { AuthProvider } from "./AuthProvider";
 const AppProvider = () => {
   return (
     <ThemeProvider theme={theme}>
-      {/* <AuthProvider> */}
+      <AuthProvider>
         <ProductProvider>
           <CartProvider>
             <RootProvider />
           </CartProvider>
         </ProductProvider>
-      {/* </AuthProvider> */}
+      </AuthProvider>
     </ThemeProvider>
   );
 };

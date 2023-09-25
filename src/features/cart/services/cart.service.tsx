@@ -1,12 +1,7 @@
 import { ProductDocumentTypes } from "@features/products/types/Product";
 import { db } from "../../../db";
-import { CartAction, CartActionsTypes, CartItemTypes } from "../types/Cart";
-
-export const cartActions: CartActionsTypes = {
-  INCREMENT_PRODUCT: "INCREMENT_PRODUCT",
-  DECREMENT_PRODUCT: "DECREMENT_PRODUCT",
-  RESET_CART: "RESET_CART",
-};
+import { cartActions } from "./cart.actions";
+import { CartAction, CartItemTypes } from "../types/Cart";
 
 export const incrementProduct = (payload: ProductDocumentTypes, dispatch: React.Dispatch<CartAction>) => {
   dispatch({ type: cartActions.INCREMENT_PRODUCT, payload });

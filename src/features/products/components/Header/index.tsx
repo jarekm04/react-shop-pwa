@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "@app/store";
-import { useAuth } from "@hooks/useAuth";
 import { useCart } from "@hooks/useCart";
-import { addWebAuthnOptions, logout } from "@features/auth/slicers/authSlice";
+import { useAuth } from "@hooks/useAuth";
 import { DisplayUserTypes } from "@features/auth/types/DisplayUser";
 import { Button } from "@features/ui/Button";
 import { CartIcon } from "@features/ui/CartIcon";
@@ -12,9 +10,8 @@ import styles from "./header.module.css";
 
 const Header = () => {
   const [cartCount, setCartCount] = useState(0);
-  const { user } = useAuth();
+  const { user, logout, addWebAuthnOptions } = useAuth();
   const { cart } = useCart();
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,12 +21,13 @@ const Header = () => {
 
   const handleAddWebAuthnOptions = (user?: DisplayUserTypes | null) => {
     if (user) {
-      dispatch(addWebAuthnOptions(user));
+      console.log(user)
+      addWebAuthnOptions(user);
     } else return;
   };
 
   const handleLogout = () => {
-    dispatch(logout());
+    logout();
     navigate("/signin");
   };
 
