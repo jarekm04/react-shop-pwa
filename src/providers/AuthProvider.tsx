@@ -10,7 +10,7 @@ import {
   register,
   signInWithWebAuthn,
   verifyJwt,
-} from "@features/auth/services/auth2.service";
+} from "@features/auth/services/auth.service";
 import { authActions } from "@features/auth/services/auth.actions";
 import { AuthAction } from "@features/auth/types/AuthActions";
 import { NewUserTypes } from "@features/auth/types/NewUser";
@@ -43,7 +43,6 @@ const initialState: AuthStateTypes = {
 export const AuthContext = createContext(initialState);
 
 const authReducer = (state: AuthStateTypes, action: AuthAction) => {
-  console.log(action)
   switch (action.type) {
     case authActions.REGISTER_PENDING:
     case authActions.LOGIN_PENDING:

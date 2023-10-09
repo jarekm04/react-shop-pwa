@@ -16,6 +16,10 @@ const SignInForm = () => {
   const passwordInput = useInput(validatePassword);
   const navigate = useNavigate();
 
+  const checkWebAuthPossibility = !isWebAuthn
+    ? false
+    : !emailInput.text.length || !passwordInput.text.length || passwordInput.text.length < 6;
+
   useEffect(() => {
     if (!isAuthenticated) return;
     navigate("/");
@@ -80,21 +84,12 @@ const SignInForm = () => {
 
           {isWebAuthn && (
             <div className={styles.WebAuthn}>
-              {/* <Button handleClick={() => signInWithWebAuthn(emailInput.text)} option='secondary'>
-                Sign In with WebAuthn / Passkey
-              </Button> */}
-              <div onClick={() => signInWithWebAuthn(emailInput.text)}>
-                Sign In with WebAuthn / Passkey
-              </div>
+              <div onClick={() => signInWithWebAuthn(emailInput.text)}>Sign In with WebAuthn / Passkey</div>
             </div>
           )}
 
           <div className={styles.BtnWrapper}>
-            <Button
-              type='submit'
-              option='tertiary'
-              // disabled={!emailInput.text.length || !passwordInput.text.length || passwordInput.text.length < 6}
-            >
+            <Button type='submit' option='tertiary' disabled={checkWebAuthPossibility}>
               Sign-In
             </Button>
           </div>

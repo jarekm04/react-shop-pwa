@@ -27,7 +27,7 @@ export type CheckAuthOptionsAction =
 
 export type SignInWithWebAuthnAction =
   | { type: "SIGNINWITHWEBAUTHN_PENDING" }
-  | { type: "SIGNINWITHWEBAUTHN_FULFILLED"; payload: { data } }
+  | { type: "SIGNINWITHWEBAUTHN_FULFILLED"; payload }
   | { type: "SIGNINWITHWEBAUTHN_REJECTED" };
 
 export type AuthAction =

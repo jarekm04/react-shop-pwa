@@ -21,7 +21,6 @@ const Header = () => {
 
   const handleAddWebAuthnOptions = (user?: DisplayUserTypes | null) => {
     if (user) {
-      console.log(user)
       addWebAuthnOptions(user);
     } else return;
   };

@@ -1,16 +1,23 @@
-todo:
-- React Context & Redux - mieszanie kontekstu w celach treningowych
-- full offline pwa - DONE
-- cache aplikacji w Cache Storage - DONE
-- stan koszyka zapisywany w indexedb
-- autoryzacja WebAuthn - DONE
-- przy autoryzacji przez webauthn mozna zaimplementowac cookies albo jwt
-- cchat bot do zapytan
-- dodaj fullscreen, okienko zewnętrzne a w niej reklama - player - filmik
-- dodaj rozpoznanie mowy - sterowanie głosem, dodawanie produktów
-- dodaj słuchanie podsumowania koszyka
-- customowa operacja sharowania produktu
-- dodaj geolokalizację - pokaz najblisze sklepy
-- przy 401 auto refresh token przez interceptor w axios
+# E-Commerce Shop - FullStack PWA App with Standard Auth & Jwt Token and WebAuthn
 
-- admin panel - tworzenie, edycja, usuwanie produktów
+# Backend
+  - NestJS
+
+# DB
+  - Mongo
+  - Mongo express
+  - Docker
+
+# Frontend
+  - Full offline PWA with vite-plugin-pwa
+  - Dexie.js - saves cart state in IndexedDB
+  - React + TypeScript
+  - React Context & useReducer
+  - WebAuthn Register & Login - enables the use of physical, cryptographically-secure hardware "authenticators" to provide stronger replacements to passwords or 2FA
+  - CSS Modules
+  - Vite
+    
+# Testing  
+  - React Testing Library
+  - Vitest
+  - Cypress

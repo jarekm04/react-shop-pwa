@@ -1,8 +1,9 @@
-import { Card, CardActions, CardContent, CardMedia, Button, Typography } from "@mui/material";
-import { ProductDocumentTypes } from "../../types/Product";
-import { db } from "../../../../db";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useCart } from "@hooks/useCart";
+import { Button } from "@features/ui/Button";
+import { db } from "../../../../db";
+import styles from "./products.module.css";
+import { ProductDocumentTypes } from "../../types/Product";
 
 const Product = ({ product }: { product: ProductDocumentTypes }) => {
   const { cart, incrementProduct, decrementProduct } = useCart();
@@ -18,39 +19,22 @@ const Product = ({ product }: { product: ProductDocumentTypes }) => {
   }
 
   return (
-    <Card sx={{ width: 300, minWidth: 300 }}>
-      <CardMedia component='img' height='140' image='https://via.placeholder.com/300.png/09f/fff' alt='image' />
-      <CardContent>
-        <Typography gutterBottom variant='h5' component='div'>
-          {product.price} zł
-        </Typography>
-        {product.description && (
-          <Typography variant='body2' color='text.secondary'>
-            {product.description}
-          </Typography>
-        )}
-      </CardContent>
-      <CardActions sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Button
-          onClick={() => {
-            decrementProduct(product);
-          }}
-          disabled={qty === 0}
-          size='large'
-        >
+    <div className={styles.Product}>
+      <img src='https://via.placeholder.com/300.png/09f/fff' alt='image' />
+      <div className={styles.Info}>
+        <p>{product.price} $</p>
+        {product.description && <p>{product.description}</p>}
+      </div>
+      <div className={styles.Actions}>
+        <Button handleClick={() => decrementProduct(product)} option='tertiary'>
           -
         </Button>
-        <span>{qty}</span>
-        <Button
-          onClick={() => {
-            incrementProduct(product);
-          }}
-          size='large'
-        >
+        <span className={styles.Qty}>{qty}</span>
+        <Button handleClick={() => incrementProduct(product)} option='tertiary'>
           +
         </Button>
-      </CardActions>
-    </Card>
+      </div>
+    </div>
   );
 };
 
