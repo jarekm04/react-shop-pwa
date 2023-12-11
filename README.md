@@ -1,5 +1,7 @@
 # E-Commerce Shop - FullStack PWA App with Standard Auth & Jwt Token and WebAuthn
 
+Api -> [Click](https://github.com/jarekm04/nestjs-shop-api/tree/master) to GitHub Repo. 
+
 # Backend
   - NestJS
 
@@ -21,3 +23,28 @@
   - React Testing Library
   - Vitest
   - Cypress
+
+## Env example
+```
+VITE_API_HOST='http://localhost:3000/api'
+```
+
+### Run project
+```
+npm run dev
+```
+
+### Run unit tests
+```
+npm run test
+```
+
+### Run cypress tests
+```
+npm run cypress
+```
+
+### Build project
+```
+npm run build
+```

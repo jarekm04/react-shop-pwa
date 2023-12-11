@@ -96,7 +96,6 @@ export const addWebAuthnOptions = async ({
   dispatch({ type: authActions.ADDWEBAUTHNOPTIONS_PENDING });
 
   const registrationRes = await axios.post(`${import.meta.env.VITE_API_HOST}/webauthn/registration-options`, user);
-  console.log(registrationRes);
 
   const options = await registrationRes.data;
   options.authenticatorSelection.residentKey = "required";
